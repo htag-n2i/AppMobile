@@ -56,6 +56,14 @@ angular.module('starter.controllers', [])
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation) {
+    function getContent(title, date, address) {
+        var res = "<h4>" + title + "</h4>";
+        res += "<p>" + address + "</p>";
+        return res;
+    }
+
+    var geocoder = new google.maps.Geocoder();
+
     $cordovaGeolocation.getCurrentPosition(null).then(function(position){
    
       var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -66,11 +74,38 @@ angular.module('starter.controllers', [])
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
    
-      $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      geocoder.geocode( { 'address': "41 rue de Selestat, Strasbourg"}, function(results, status) {
+          if (status == google.maps.GeocoderStatus.OK) 
+          {
+            var marker = new Marker({
+                map: map,
+                position: results[0].geometry.location,
+                icon: {
+                    path: MAP_PIN,
+                    fillColor: '#00CCBB',
+                    fillOpacity: 1,
+                    strokeColor: '#000000',
+                    strokeWeight: 1
+                },
+                map_icon_label: '<span class="map-icon map-icon-clothing-store"></span>'
+            });
+            var infowindow = new google.maps.InfoWindow({
+                content: getContent("Distribution d'habits", null, "41 rue de Selestat, Strasbourg")
+            });
+            marker.addListener('click', function() {
+                infowindow.open(map, marker);
+            });
+          }
+      });
       var myLocation = new google.maps.Marker({
           position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-          map: $scope.map,
+          map: map,
           title: "My Location"
+      });
+
+      map.addListener('tilesLoaded', function() {
+        console.log('loaded');
       });
    
     }, function(error){
