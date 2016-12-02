@@ -50,7 +50,7 @@ angular.module('starter.controllers', [])
   $scope.new = NewsFactory.get($stateParams.newsId);
 })
 
-.controller('MapCtrl', function($scope, $state, $cordovaGeolocation) {
+.controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $http, API) {
     function getContent(title, date, address) {
         var res = "<h4>" + title + "</h4>";
         res += "<p>" + address + "</p>";
@@ -58,6 +58,34 @@ angular.module('starter.controllers', [])
     }
 
     var types = {
+        0:{
+            "icon":"clothing-store",
+            "color":"#00CCBB"
+        },
+        1:{
+            "icon":"restaurant",
+            "color":"#387ef5"
+        },
+        2:{
+            "icon":"lodging",
+            "color":"#33cd5f"
+        },
+        3:{
+            "icon":"doctor",
+            "color":"#ffc900"
+        },
+        4:{
+            "icon":"toilet",
+            "color":"#ef473a"
+        },
+        5:{
+            "icon":"insurance-agency",
+            "color":"#886aea"
+        },
+        6:{
+            "icon":"physiotherapist",
+            "color":"#fc8d84"
+        }
     }
 
     var geocoder = new google.maps.Geocoder();
@@ -73,37 +101,34 @@ angular.module('starter.controllers', [])
       };
 
       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
-      geocoder.geocode( { 'address': "41 rue de Selestat, Strasbourg"}, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK)
+
+      var url = API.baseUrl + "/events?lat=" + position.coords.latitude + "&long=" + position.coords.longitude;
+      $http.get(url)
+      .success(function(data) {
+          for (var i = 0; i < data.length; i++)
           {
-            var marker = new Marker({
-                map: map,
-                position: results[0].geometry.location,
-                icon: {
-                    path: MAP_PIN,
-                    fillColor: '#00CCBB',
-                    fillOpacity: 1,
-                    strokeColor: '#000000',
-                    strokeWeight: 1
-                },
-                map_icon_label: '<span class="map-icon map-icon-clothing-store"></span>'
+              var ev = data[i];
+              var type = ev.type;
+              var marker = new Marker({
+              map: map,
+              position: results[0].geometry.location,
+              icon: {
+                  path: MAP_PIN,
+                  fillColor: types.type.color,
+                  fillOpacity: 1,
+                  strokeColor: '#000000',
+                  strokeWeight: 1
+              },
+              map_icon_label: '<span class="map-icon map-icon-' + types.type.icon + '"></span>'
             });
+
             var infowindow = new google.maps.InfoWindow({
                 content: getContent("Distribution d'habits", null, "41 rue de Selestat, Strasbourg")
             });
-            marker.addListener('click', function() {
-                infowindow.open(map, marker);
-            });
           }
-      });
-      var myLocation = new google.maps.Marker({
-          position: new google.maps.LatLng(position.coords.latitude, position.coords.longitude),
-          map: map,
-          title: "My Location"
-      });
-
-      map.addListener('tilesLoaded', function() {
-        console.log('loaded');
+      })
+      marker.addListener('click', function() {
+          infowindow.open(map, marker);
       });
 
     }, function(error){

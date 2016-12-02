@@ -59,4 +59,8 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
 	});
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/news');
+})
+
+.constant("API", {
+   baseUrl: 'http://emigroo.htag.fr'
 });
