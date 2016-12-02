@@ -41,18 +41,13 @@ angular.module('starter.controllers', [])
   };
 })
 
-.controller('PlaylistsCtrl', function($scope) {
-  $scope.playlists = [
-    { title: 'Reggae', id: 1 },
-    { title: 'Chill', id: 2 },
-    { title: 'Dubstep', id: 3 },
-    { title: 'Indie', id: 4 },
-    { title: 'Rap', id: 5 },
-    { title: 'Cowbell', id: 6 }
-  ];
+
+.controller('NewsCtrl', function($scope, NewsFactory) {
+  $scope.news = NewsFactory.all();
 })
 
-.controller('PlaylistCtrl', function($scope, $stateParams) {
+.controller('NewCtrl', function($scope, $stateParams, NewsFactory) {
+  $scope.new = NewsFactory.get($stateParams.newsId);
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation) {
@@ -65,18 +60,18 @@ angular.module('starter.controllers', [])
     var geocoder = new google.maps.Geocoder();
 
     $cordovaGeolocation.getCurrentPosition(null).then(function(position){
-   
+
       var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-   
+
       var mapOptions = {
         center: latLng,
         zoom: 13,
         mapTypeId: google.maps.MapTypeId.ROADMAP
       };
-   
+
       var map = new google.maps.Map(document.getElementById("map"), mapOptions);
       geocoder.geocode( { 'address': "41 rue de Selestat, Strasbourg"}, function(results, status) {
-          if (status == google.maps.GeocoderStatus.OK) 
+          if (status == google.maps.GeocoderStatus.OK)
           {
             var marker = new Marker({
                 map: map,
@@ -107,7 +102,7 @@ angular.module('starter.controllers', [])
       map.addListener('tilesLoaded', function() {
         console.log('loaded');
       });
-   
+
     }, function(error){
       console.log("Could not get location");
     });
