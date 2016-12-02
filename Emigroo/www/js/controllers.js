@@ -50,6 +50,14 @@ angular.module('starter.controllers', [])
   $scope.new = NewsFactory.get($stateParams.newsId);
 })
 
+.controller('EventsCtrl', function($scope, EventsFactory) {
+  $scope.events = EventsFactory.all();
+})
+
+.controller('EventCtrl', function($scope, $stateParams, EventsFactory) {
+  $scope.event = EventsFactory.get($stateParams.eventId);
+})
+
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $http, API) {
     function getContent(id, title, date, address) {
         var res = "<h4>" + title + "</h4>";

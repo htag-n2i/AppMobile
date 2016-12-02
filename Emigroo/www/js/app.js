@@ -48,6 +48,24 @@ angular.module('starter', ['ionic', 'ngCordova', 'starter.controllers', 'starter
         }
       }
     })
+    .state('app.events_feed', {
+      url: '/events',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/events_feed.html',
+          controller: 'EventsCtrl'
+        }
+      }
+    })
+    .state('app.event', {
+      url: '/events/:eventId',
+      views: {
+        'menuContent': {
+          templateUrl: 'templates/event.html',
+          controller: 'EventCtrl'
+        }
+      }
+    })
 	.state('app.map', {
 	  url: '/map',
 	  views: {

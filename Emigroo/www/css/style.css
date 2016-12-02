@@ -12,3 +12,11 @@
 #news a.item-content{
 	padding: 0;
 }
+
+#events a.item-content{
+	padding: 20px;
+}
+
+.decalLeft{
+	margin-left: 15px;
+}

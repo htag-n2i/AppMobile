@@ -1,0 +1,10 @@
+<ion-view view-title="Events">
+  <ion-content>
+  	<ion-item id="events" class="list card" ng-repeat="event in events" href="#/app/events/{{event.id}}">
+	  <div class="itemd">
+	    <h2><span class="map-icon map-icon-{{event.icon}}"></span>{{event.title}}</h2>
+	    <p class="decalLeft">{{event.city}}</p>
+	    <p class="decalLeft">{{event.description}}</p>
+	  </div>
+  </ion-content>
+</ion-view>
