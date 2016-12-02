@@ -54,10 +54,7 @@ angular.module('starter.controllers', [])
     function getContent(id, title, date, address) {
         var res = "<h4>" + title + "</h4>";
         res += "<p>" + address + "</p>";
-        if (date != null)
-        {
-            res += "<p>" + date + "</p>";
-        }
+        res += "<p>" + date + "</p>";
         res += "<p><a href='#/app/events/" + id + "'>Détail</a></p>";
         return res;
     }
@@ -128,7 +125,7 @@ angular.module('starter.controllers', [])
               });
 
               var infowindow = new google.maps.InfoWindow({
-                  content: getContent(ev.id, ev.title, ev.date, ev.address);
+                  content: getContent(ev.id, ev.title, ev.date, ev.address)
               });
           }
       })
