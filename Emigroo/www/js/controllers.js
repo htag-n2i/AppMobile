@@ -51,9 +51,14 @@ angular.module('starter.controllers', [])
 })
 
 .controller('MapCtrl', function($scope, $state, $cordovaGeolocation, $http, API) {
-    function getContent(title, date, address) {
+    function getContent(id, title, date, address) {
         var res = "<h4>" + title + "</h4>";
         res += "<p>" + address + "</p>";
+        if (date != null)
+        {
+            res += "<p>" + date + "</p>";
+        }
+        res += "<p><a href='#/app/events/" + id + "'>Détail</a></p>";
         return res;
     }
 
@@ -86,7 +91,7 @@ angular.module('starter.controllers', [])
             "icon":"physiotherapist",
             "color":"#fc8d84"
         }
-    }
+    };
 
     var geocoder = new google.maps.Geocoder();
 
@@ -110,21 +115,21 @@ angular.module('starter.controllers', [])
               var ev = data[i];
               var type = ev.type;
               var marker = new Marker({
-              map: map,
-              position: results[0].geometry.location,
-              icon: {
-                  path: MAP_PIN,
-                  fillColor: types.type.color,
-                  fillOpacity: 1,
-                  strokeColor: '#000000',
-                  strokeWeight: 1
-              },
-              map_icon_label: '<span class="map-icon map-icon-' + types.type.icon + '"></span>'
-            });
+                  map: map,
+                  position: results[0].geometry.location,
+                  icon: {
+                      path: MAP_PIN,
+                      fillColor: types.type.color,
+                      fillOpacity: 1,
+                      strokeColor: '#000000',
+                      strokeWeight: 1
+                  },
+                  map_icon_label: '<span class="map-icon map-icon-' + types.type.icon + '"></span>'
+              });
 
-            var infowindow = new google.maps.InfoWindow({
-                content: getContent("Distribution d'habits", null, "41 rue de Selestat, Strasbourg")
-            });
+              var infowindow = new google.maps.InfoWindow({
+                  content: getContent(ev.id, ev.title, ev.date, ev.address);
+              });
           }
       })
       marker.addListener('click', function() {
